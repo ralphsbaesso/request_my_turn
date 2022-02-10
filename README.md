@@ -1,15 +1,14 @@
-# Request::My::Turn
+# RequestMyTurn
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/request/my/turn`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Gem feita para utilizar a imagem [my-turn](https://hub.docker.com/r/ralphbaesso/my-turn).
+Projeto feito para enfileirar requisições que utilizam a mesma chave.
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'request-my-turn'
+gem 'request_my_turn'
 ```
 
 And then execute:
@@ -18,26 +17,38 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install request-my-turn
+    $ gem install request_my_turn
 
 ## Usage
 
-TODO: Write usage instructions here
+```ruby
+service = RequestMyTurn.new('my_key')
+service.perform do
+  # sua lógica aqui
+end
+```
 
-## Development
+#### Objetivo
+Limitar acesso ao determinado recurso.
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+Quando executa *service.perform*, 
+o *service* requisita um **id** para aquela chave e bloqueia todas as outros requisições com a mesma chave. 
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+Quando termina a sua lógica, o *service* devolve o **id** liberando a fila com aquela chave.
 
-## Contributing
+### Opções
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/request-my-turn. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/request-my-turn/blob/master/CODE_OF_CONDUCT.md).
+```ruby
+service = RequestMyTurn.new(
+  'my_key', # chave da sua requisição
+  url: 'https://examples.com', # url do servidor MyTurn
+  before: -> id { p id }, # callback executado antes da lógica. O parâmetro é o id da requisição
+  after: -> time { p time }, # callback executado depois da lógica e da devolução do id. O parâmetro é o tempo quasto do processo.
+  switch: -> service { p service }, # liga/desliga a requisição para o servidor. Pode ser um valor true/false ou um callback. 
+  timeout: 60, # tempo máximo de espera para aguardar na fila.
+  lock_seconds: 60, # tempo para bloquear a fila no servidor. Default 60 segundos.
+  headers: {}, # headers para enviar na requisição do servidor
+  ignore_timeout_error: false, # Se verdade, lança um Exception quando ocorrer Timeout. 
+)
 
-## License
-
-The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
-
-## Code of Conduct
-
-Everyone interacting in the Request::My::Turn project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/request-my-turn/blob/master/CODE_OF_CONDUCT.md).
+```

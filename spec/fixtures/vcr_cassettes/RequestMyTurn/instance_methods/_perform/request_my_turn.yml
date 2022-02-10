@@ -1,0 +1,71 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://localhost:4567/my_turn?seconds=10
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:4567
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - text/html;charset=utf-8
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      Content-Length:
+      - '59'
+    body:
+      encoding: UTF-8
+      string: '{"status":"Ok","id":"5032ea9b-55e0-42c3-af5d-5f8035809d43"}'
+  recorded_at: Wed, 09 Feb 2022 19:31:03 GMT
+- request:
+    method: delete
+    uri: http://localhost:4567/my_turn/5032ea9b-55e0-42c3-af5d-5f8035809d43
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:4567
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - text/html;charset=utf-8
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      Content-Length:
+      - '46'
+    body:
+      encoding: UTF-8
+      string: '{"status":"Ok","locked":"0.001555322 seconds"}'
+  recorded_at: Wed, 09 Feb 2022 19:31:03 GMT
+recorded_with: VCR 6.0.0
